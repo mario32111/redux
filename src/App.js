@@ -1,24 +1,30 @@
 import './App.css';
 import PokemonList from './components/PokemonList';
 import Searcher from './components/Searcher';
-import { Col } from 'antd'
+import { Col, Spin } from 'antd'
 import 'antd/dist/reset.css';
 import logo from './components/statics/logo.svg'
 import { useEffect, useState } from 'react';
 import { getPokemon } from './api';
-import { connect } from 'react-redux';
-import { setPokemons as setPokemonsActions} from './components/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { getPokemonsWithDetails, setLoading } from './components/actions';
 
-function App({ pokemons, setPokemons }) { 
+function App() {
 
+  const pokemons = useSelector(state => state.pokemons);
+  const loading = useSelector(state => state.loading);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchPokemons = async () => {
-      const pokemonsRes =await getPokemon();
-      setPokemons(pokemonsRes);
+      dispatch(setLoading(true))
+      const pokemonsRes = await getPokemon();
+      //esto separa las responsabnilidades y hace que el otro action creator sea asincrono
+      dispatch(getPokemonsWithDetails(pokemonsRes));
+      dispatch(setLoading(false))
     };
 
-      fetchPokemons();
+    fetchPokemons();
   }, []);
   return (
     <div className="App">
@@ -28,27 +34,12 @@ function App({ pokemons, setPokemons }) {
       <Col span={8} offset={8}>
         <Searcher />
       </Col>
-      <PokemonList pokemons={pokemons}/>
+      {loading ? <Col offset={12}>
+        <Spin spinning size='large' />
+      </Col> : <PokemonList pokemons={pokemons} />}
+
     </div>
   );
 }
 
-//funcion que recibe el estado y retorna un objeto 
-//cuyas propiedades son eviadas a los props del componente que se esta conectando a redux
-//es como el state en la sintaxis anterior
-const mapStateToProps= (state) => ({
-  pokemons: state.pokemons,
-});
-
-
-//esta funcion recibe el dispatch de redux
-//y retorna un objeto que va a ser mapeado a las propiedades
-//con los action creators creados
-//es como el dispatch en la sintaxis anterior
-const mapDispatchToProps = (dispatch) => ({
-  setPokemons: (value) => dispatch(setPokemonsActions(value))
-});
-
-
-//asi se conecta un componente a redux
-export default connect(mapStateToProps, mapDispatchToProps) (App);
+export default App;
