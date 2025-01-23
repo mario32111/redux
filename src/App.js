@@ -4,15 +4,15 @@ import Searcher from './components/Searcher';
 import { Col, Spin } from 'antd'
 import 'antd/dist/reset.css';
 import logo from './components/statics/logo.svg'
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { getPokemon } from './api';
-import { useDispatch, useSelector } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { getPokemonsWithDetails, setLoading } from './components/actions';
 
 function App() {
 
-  const pokemons = useSelector(state => state.pokemons);
-  const loading = useSelector(state => state.loading);
+  const pokemons = useSelector(state => state.getIn(['data', 'pokemons'], shallowEqual)).toJS();
+  const loading = useSelector(state => state.getIn(['ui', 'loading']));
   const dispatch = useDispatch();
 
   useEffect(() => {
