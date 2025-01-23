@@ -1,4 +1,4 @@
-import { SET_POKEMONS } from "../components/actions/types";
+import { SET_POKEMONS } from "../components/actions-d/types";
 
 export const logger = (store) => (next) => (action) => {
     console.log(action);

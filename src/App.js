@@ -5,26 +5,18 @@ import { Col, Spin } from 'antd'
 import 'antd/dist/reset.css';
 import logo from './components/statics/logo.svg'
 import { useEffect } from 'react';
-import { getPokemon } from './api';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { getPokemonsWithDetails, setLoading } from './components/actions';
+import { fetchPokemonsWithDetails } from './slices/dataSlice';
 
 function App() {
 
-  const pokemons = useSelector(state => state.getIn(['data', 'pokemons'], shallowEqual)).toJS();
-  const loading = useSelector(state => state.getIn(['ui', 'loading']));
+  const pokemons = useSelector(state => state.data.pokemons, shallowEqual);
+  //const loading = useSelector(state => state.ui.loading);
+  const loading = useSelector(state => state.ui.loading);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const fetchPokemons = async () => {
-      dispatch(setLoading(true))
-      const pokemonsRes = await getPokemon();
-      //esto separa las responsabnilidades y hace que el otro action creator sea asincrono
-      dispatch(getPokemonsWithDetails(pokemonsRes));
-      dispatch(setLoading(false))
-    };
-
-    fetchPokemons();
+    dispatch(fetchPokemonsWithDetails())
   }, []);
   return (
     <div className="App">
