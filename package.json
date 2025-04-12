@@ -20,12 +20,12 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "lint": "standard",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
-      "./node_modules/standard/eslintrc.json"
+      "react-app",
+      "react-app/jest"
     ]
   },
   "browserslist": {
@@ -39,8 +39,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "standard": "^17.1.2"
   }
 }
