@@ -22,6 +22,7 @@ const store = createStore(
   composedEndhancers,
 );
 
+
 root.render(
   <React.StrictMode>
     <Provider store={store}>
