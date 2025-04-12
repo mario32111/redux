@@ -16,8 +16,9 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchPokemonsWithDetails())
-  }, []);
+    dispatch(fetchPokemonsWithDetails());
+  }, [dispatch]); // ✅ ahora ESLint no se quejará
+  
   return (
     <div className="App">
       <Col span={4} offset={10}>
